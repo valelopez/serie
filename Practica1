@@ -1,0 +1,27 @@
+#####1. simulacion de series de tiempo######
+###vamos a simular 1 indicador###
+###para la simulación en principio necesitamos alguna info####
+####valor maximo, minimo, el num de datos
+
+###en este ejemplo vamos a proponer la poblacion de mexico
+###que el valor minimo seran 100, max 120, 15 datos que no se repitan
+pob <- sample(100:120, 15, replace = F)
+pob
+### la convertimos en serie de tiempo que inicie en el año 2000 
+###y se repita cada dato una vez al año (datos anuales)
+pobts <- ts(pob, frequency = 1 , start = (2000)) 
+end (pobts)###esta funcion indica en que año termina la serie
+start (pobts)### en que año inicia
+plot(pobts) ###darle formato a la grafica
+plot(aggregate(pobts))
+
+
+##con archibo de inegi
+### en formato csv importar 
+indicadores <- read.csv("C://Users//Sala-H20//Desktop//indicadores.csv")  ##se borra file y se agregan diagonales
+indicadores
+indicadorests <- ts(indicadores, frequency =4, start = (2005))
+end (indicadorests)
+start (indicadorests)
+plot(indicadorests) 
+plot(indicadorests, ylim=c(50,70)) ## para cambiar el rango en eje y 
