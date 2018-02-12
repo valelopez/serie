@@ -1,0 +1,40 @@
+###AirPassengers###
+install.packages("forecast")
+require(forecast)
+View (AirPassengers)#crea una tabla de la  base de datos de airpassengers
+
+help("AirPassengers")
+class(AirPassengers)##para saber que tipo de datos contiene esa base (responde ST)
+start (AirPassengers)## para saber cuando inicia la base
+print (AirPassengers)##imprime todos los datos de la base
+length(AirPassengers)###para saber cuantos datos tiene la base
+head(AirPassengers, n=8 )##para mostras los primeros 8 datos de la base AirPassengers
+tail(AirPassengers, n=8)## los ultimos 8 datos
+plot(AirPassengers)##imprime grafica
+plot(AirPassengers, xlab="Años", ylab="No. Pasajeros")###Poner etiqueta a los ejes
+plot(AirPassengers, xlab="Años", ylab="No. Pasajeros", type="o")
+
+
+###EJERCICIO EN CLASE
+##de la pag del INEGI bajar la tasa de informalidad laboral
+##en valores relativos a nivel nacional, todos los trimestres
+##2005-2017, importarla a R y declararla serie de tiempo
+##una vez que hayan declaradi la serie, 
+##usar la funcion PRINT, LENGHT, HEAD, TAIL (10 datos) y explicarlos
+##graficar la ST con 3 tipos de graficas diferentes y 3 colores 
+##ademas investigar y usar las fn TIME, DELTAT, CYCLE, FREQUENCY y explicar para que sirven
+
+indicadores <- read.csv("C://Users//USUARIO//Desktop//indicadoresenoe.csv")  ##se borra file y se agregan diagonales
+indicadores
+indicadorests <- ts(indicadores, frequency =4, start = (2005))
+print (indicadorests)##iMPRIMIMOS TODOS LOS VALORES DE LA BASE DE DATOS DE INFORMALIDAD LABORAL DEL 2005 A 2017 POR TRIMESTRE
+length(indicadorests)###nOS SEÑALA QUE LA TIL CONSTA DE 50 INDICADORES DEL AÑO 2005 AL 2017 POR TRIMESTRE
+head(indicadorests, n=10 )##NOS MUESTRA LOS 10 PRIMEROS DATOS DE LA TIL
+tail(indicadorests, n=10)##NOS MUESTRA LOS ULTIMOS 10 DATOS DE LA TIL
+plot(indicadorests, xlab="Años", ylab="Tasa", type="o", col="red")
+plot(indicadorests, xlab="Años", ylab="Tasa", type="s", col="blue")
+plot(indicadorests, xlab="Años", ylab="Tasa", type="c", col="green")
+time (indicadorests)##Crea el vector del tiempo en el que se realiza la muestra de la serie de tiempo
+deltat (indicadorests)##Intervalo entre las observaciones
+cycle  (indicadorests)##Las posiciones en el ciclo de cada observación
+frequency (indicadorests)## el numero de muestras por unidad de tiempo
