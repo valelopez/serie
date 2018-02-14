@@ -1,0 +1,27 @@
+### EJERCICIO 
+#Intentar una serie de tiempo con datos faltantes
+#350, 358, 367, 367, 380, 388, 402, 415, 432, 450,
+# NA, NA, NA, NA, 367, 342, 324, 315, 310, 298
+
+##Graficar el vector
+ #declarar y graficar la serie
+ #imputar datos faltantes ¿cómo lo harían?
+ #graficar la serie de tiempo
+ #EuStockMarkets con la funcion plot. ¿Qué observan?
+ #ts.plot(EuStockMarkets, col=1:4)
+
+datos<- c(350,358,367,367,380,388,402,415,432,450,NA,NA,NA,NA,367,342,324,315,310,298)
+plot(datos) ##grafica como puntos
+datosts<- ts(datos, frequency = 2, start=2000, end=2010)
+plot(datosts) ##grafica como lineas
+##Para imputar datos faltantes se PROPONE obtener la media y despues asignar valores 
+# (TRUE porque hay valores NA)
+##  mean(datosts, na.rm=TRUE) 
+datosts[11:14] <- mean(datosts, na.rm=TRUE) ##Del dato 11 al 14 introducir la media
+datosts
+plot(datosts)
+
+##EuStockMarkets
+plot(EuStockMarkets)
+ts.plot(EuStockMarkets, col=1:4)## el segundo argumento son los 4 colores diferentes
+
