@@ -1,0 +1,9 @@
+##EJERCICIO
+#Obtener cov y corr
+x<-c(36,44,40,46,46,40,49,41,40)
+y<-c(13,20,20,20,20,28,21,22,31)                                                                                                                      
+n<-length(x)
+
+covar<-sum((x-mean(x))*(y-mean(y)))/(n-1)
+
+corr<- covar/(sd(x)*sd(y))
