@@ -1,0 +1,90 @@
+aa<-AirPassengers
+plot(aa)
+plot(aggregate(aa))##Aggregate muestra la tendencia de la ST
+boxplot(aa~cycle(aa))##Gráfica decajas por periodo de la ST
+
+tdeso<-read.csv("C://Users//USUARIO//Desktop//ENOE.csv")
+tdesots<- ts(tdeso, frequency = 4, start =2005)##para declarar el inicio en el 
+## trimestre 3 entonces: start=c(2005,3)
+##PARA SABER LA TASA DE DESOCUPACIÓN ANUAL
+tdesoanual<-aggregate(tdesots)/4
+layout(1:2)
+plot(tdesots)
+plot(tdesoanual)
+
+##NOTA
+#para imprimir graficas en ventanas separadas: x11()
+#para imprimir graficas en una ventana: layout(1:2)
+
+##Ahora vamos a dividir en dos partes la ST
+tdeso1<-window(tdesots, start = c (2008,2), end=c(2015,3))
+               
+###EJERCICIO (Tasa de ocupación parcial, trabajo asalariado, informalidad laboral )
+tasas<- read.csv("C://Users//USUARIO//Desktop//indic3.csv")
+##realizar la ST de cada tasa, los corchetes indican que columna
+tocparts<- ts(tasas[,1], frequency = 4, start=2005)
+ttrab<- ts(tasas[,2], frequency = 4, start=2005)
+tinf<-ts(tasas[,3], frequency = 4, start=2005)
+##Generar ST multiple(vincular las 3)
+#sirven en R para analizar su comportamiento       
+tmultiple<- ts.intersect(tocparts,ttrab,tinf)
+plot.ts(tmultiple)
+
+
+###EJERCICIO
+#obtener 4 series de tiempo con mínimo 30 datos, las ST deben tener sustento para compararlas.
+#1. Importarlas, declararlas como ST (separadas)
+#2. Graficarlas
+#3. Crear una ST multiple y graficarla
+#4. Dividir dos ST en 3 periodos de intervalos iguales
+#5. Elegir dos ST y aplicar aggregate para conocer su tendencia y graficar las mismas (gráfico
+#    de cajas) e interpretar los periodos de estás ST
+
+##POBLACIÓN DESOCUPADA
+#ST1: Grupos de población desocupada por edad
+#ST2: Grupos de población desocupada por nivel de instrucción
+#ST3: Grupos de población desocupada por antecedentes laborales
+#ST4: Grupos de población desocupada por duración del desempleo
+
+desoc<-read.csv("C://Users//USUARIO//Desktop//desempleo.csv")
+tedad<-ts(desoc[,1], frequency = 4, start = 2005)
+tins<-ts(desoc[,2], frequency = 4, start = 2005)
+talab<- ts(desoc[,3], frequency = 4, start = 2005)
+tdur<- ts(desoc[,4], frequency = 4, start=2005)
+
+x11()
+plot(tedad)
+x11()
+plot(tins)
+x11()
+plot(talab)
+x11()
+plot(tdur)
+
+multdesoc<- ts.intersect(tedad,tins,talab,tdur)
+x11()
+plot(multdesoc)
+
+tedad1<-window(tedad, start = c (2005,2), end=c(2007,3))
+tedad2<-window(tedad, start = c (2008,3), end=c(2010,4))
+tedad3<-window(tedad, start = c (2012,1), end=c(2013,2))
+
+tins1<-window(tins, start = c (2006,3), end=c(2008,4))
+tins2<-window(tins, start = c (2009,2), end=c(2011,3))
+tins3<-window(tins, start = c (2012,1), end=c(2013,2))
+
+x11()
+plot(aggregate(tedad))
+x11()
+plot(aggregate(tins))
+
+x11()
+boxplot(tedad~cycle(tedad))
+x11()
+boxplot(tins~cycle(tins))
+
+X11()
+plot
+##INTERPRETACIÓN
+##Las graficas por periodos, muestran los datos del periodo determinado, también con el eggregate muestra la tendencia
+##de los datos en dicho periodo.
