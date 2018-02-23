@@ -1,0 +1,25 @@
+serie1<-sample(300:1000, 120)
+tserie1<- ts(serie1, frequency = 12, start=2002)
+tdeso<- decompose(tserie1) #Descomponer una serie de tiempo
+x11() 
+plot(tdeso)
+names(tdeso)#Para saber los componentes de la ST
+tdeso #Valor ST enero 2003 #466
+tt<-tdeso$trend #632.7917
+ss<-tdeso$seasonal #31.32407
+rr<-tdeso$random #-198.115741
+
+632.7917+31.32407-198.115741 # =466 (Valor en ST)
+
+#####TAREA
+#1Bajar el PIB de México desde 1950-2015 (Tasa de Crecimiento Anual del PIB)
+#2Dividir gráfica en dos series de tiempo
+# 1. 1950-1980
+# 2. 1981-2015
+#3Hacer una gráfica general de la ST(todo el periodo)
+#4Mostrar las tres gráficas en una misma ventana, con título principal, etiqueta en el eje x, 
+#  eje y, también mostrar subtitulos (de cada gráfica), en colores diferentes.
+#5Descomponer las tres ST y comprobar que la serie es igual a la tendencia, estacionalidad y
+#  aleatoriedad en el año 1980, 2000 y 2015.
+#6Analizar e interpretar estas gráficas (análisis asociado a aspectos económicos 
+#  y políticos de cada año(periodo)
