@@ -1,0 +1,64 @@
+install.packages("fpp")
+install.packages("forecast")
+require(fpp)
+require(forecast)
+deso<- read.csv("C://Users//USUARIO//Desktop//desoc.csv")
+tsdeso<- ts(deso, frequency = 4, start = 2005)
+tsdeso0<- ts(deso[1:51,], frequency = 4, start = 2005)
+#tsdeso1<- ts(as.vector())
+a0<- decompose(tsdeso0)
+names(a0)
+
+a1<- stl(tsdeso0, s.window = 4) #descomponer la ST
+names(a1)
+a1$time.series
+x11()
+## Para observar la tendencia
+plot(tsdeso0, col= "blue", main= "Desocupacion trimestral",
+      ylab="tasa de desocupacion", xlab="años")
+lines(a1$time.series[,2],col="red", ylab="tendencia")
+      ##La gráfica muestra la línea roja la cual representa a la tendencia(columna 2[,2])
+      # y los datos originales en azul
+x11()
+plot(a1)
+
+##Para observar estacionalidad
+#gráficas estacionales con monthplot()
+x11()
+monthplot(a1$time.series[,"seasonal"], main="", ylab="seasonal")
+#Desestacionalizar con seasadj()
+x11()
+plot(tsdeso0, col="brown", main="Tasa de desocupacion", xlab="años")
+lines(seasadj(a1), col="black", ylab="Ajuste estacional")
+
+##EJERCICIO
+#Escoger una ST y realizar lo siguiente
+#1. Descomponer la ST con stl() y plantear dicha descomposición con uno de los datos que les arroje
+#2. Graficar de dicha serie el componente estacional y el de tendencia (2 graficas), en dichas gráficas
+#   usar líneas
+#3. Eliminar el componente estacional y graficarlo, comprobar  la eliminación de 
+#   dicha estacionalidad en una ecuación con la fórmula del modelo aditivo.
+
+inf<- read.csv("C://Users//USUARIO//Desktop//informalidad.csv")
+tsinf<- ts(inf, frequency = 4, start = 2005)
+tsinf0<- ts(inf[1:52,], frequency = 4, start = 2005)
+a0<- decompose(tsinf0)
+names(a0)
+a1<- stl(tsinf0, s.window = 4)
+names(a1)
+a1$time.series
+#"TENDENCIA"
+x11()
+plot(tsinf0, col= "red", main= "Informalidad Laboral trimestral",
+     ylab="Tasa de I.L.", xlab="Años")
+lines(a1$time.series[,2],col="green", ylab="Tendencia")
+#Estacionalidad
+x11()
+monthplot(a1$time.series[,"seasonal"],col="blue",  main="", ylab="seasonal")
+#Desestacionalización
+x11()
+plot(tsinf0,col="brown", main="T. Informalidad Laboral",xlab="Años")
+lines(seasadj(a1), col="black", ylab="Ajuste estacional")
+
+59.1-(-.385770556)# =59.48577
+59.72840-.2426287558 #= 59.48577
