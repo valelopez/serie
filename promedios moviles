@@ -1,0 +1,21 @@
+install.packages("fpp")
+install.packages("forecast")
+require(fpp)
+require(forecast)
+
+crim1<- c(12632,13607,12160,13335,14553,14654,12791,11923,10225,9847)
+tscrim<- ts(crim1, start = 1980)
+ma5crim<- ma(tscrim, order = 5) #Promedio movil, de 5 en 5 datos obtiene el promedio (como es de orden 5,
+#toma el año posterior del 2.5, o sea el año 3), como es promedio movil, despues de hacer el promedio
+#de los datos 1 a 5, obtiene el de 2 a 6, y así consecutivamente. 
+#NO EXISTEN valores en los dos primeros años ni en los dos últimos debido a que 
+#no existen datos para obtener el promedio movil de orden 5.
+macrim5<- data.frame(crim1, ma5crim)
+plot(tscrim, main="Crimen en México, orden 5", ylab="Millones de personas", xlab="Años")
+lines(ma5crim, col="blue")
+
+##AHORA CON ORDEN 3
+macrim3<-macrim5<- data.frame(crim1, ma(tscrim,3))
+plot(tscrim, main="Crimen en México, orden 3", ylab="Millones de personas", xlab="Años")
+lines(ma(tscrim,3), col="blue")
+
