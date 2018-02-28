@@ -1,0 +1,44 @@
+
+pib<- read.csv("/Users/valerialopez/Downloads/pib.csv")
+pib<-data.frame(pib)
+pib1<- cbind(pib, c(1961:2016))
+
+tspib <- ts(pib, start = 1961, end = 2016)
+plot(tspib, main="PIB 1961 - 2016", sub="Fuente: World Bank World Development Indicators", ylab= "Crecimiento Anual %")
+
+###########
+x0<- 1972
+y0<- tspib[12]
+text(x0,y0,c("Tasa de creciemiento 8.2%"), cex=0.6, col= 1)
+
+x1<- 1982
+y1<- tspib[22]
+text(x1,y1,c("Crisis de Deuda Pública"), cex=0.6, col= 1)
+
+x2<- 1979
+y2<-tspib[19]
+text(x2,y2,c("Auge Petrolero"), cex=0.6, col= 1)
+
+x3<- 1987
+y3<-tspib[27]
+text(x3,y3,c("PSE"), cex=0.6, col= 1)
+
+x4<- 1992
+y4<-tspib[32]
+text(x4,y4,c("Privatización Banca Mexicana"), cex=0.6, col= 1)
+
+x5<- 1995
+y5<-tspib[35]
+text(x5,y5,c("Efecto Tequila"), cex=0.6, col= 1)
+
+x6<- 2006
+y6<-tspib[46]
+text(x6,y6,c("Exportaciones Petroleras"), cex=0.6, col= 1)
+
+
+x7<- 2008
+y7<-tspib[48]
+text(x7,y7,c("Crisis EUA 2008"), cex=0.6, col= 1)
+
+##########
+
