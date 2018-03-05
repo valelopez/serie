@@ -1,0 +1,52 @@
+install.packages("fpp")
+install.packages("forecast")
+require(fpp)
+require(forecast)
+
+#1. Genera 4 series de tiempo con nombre multiple1.
+# Los rangos son: serie 1: 15-35 , serie 2: 100-200, serie 3: 29-49, serie 4: 42-162
+# Las series deben tener 250 mensuales e inician en el tercer mes del 1990.
+# hacer los datos como DATA FRAME
+# generar las series de tiempo
+
+##1.1 De la serie 1 y 2, dividir en 2 series que vayan de 1990 a 2003 y de 1998 a 2006 y graficar.
+##1.2 Dividir series 3 y 4 a traves de corchetes desde la observación 150 a la 250.
+##1.3 De dos series obtener y generar 2 data frame de la tendencia y estacionalidad.
+
+s1<-(sample(15:35, 250, replace = TRUE))
+s2<-(sample(100:200, 250, replace = TRUE))
+s3<-(sample(29:49, 250, replace = TRUE))
+s4<-(sample(42:162, 250, replace = TRUE))
+multiple1<-data.frame(s1, s2, s3, s4)
+##TS
+s1ts<-ts(multiple1[1:250,1], frequency = 12, start = c(1990,3))
+s2ts<-ts(multiple1[1:250,2], frequency = 12, start = c(1990,3))
+s3ts<-ts(multiple1[1:250,3], frequency = 12, start = c(1990,3))
+s4ts<-ts(multiple1[1:250,4], frequency = 12, start = c(1990,3))
+##1.1
+s11<- window(s1ts, frequency=12, start=c(1990,3), end=2003)
+s22<- window(s2ts, frequency=12, start= 1998, end=2006)
+x11()
+layout(1:2)
+plot(s11, col="red", xlab= "Años", ylab="Serie 1")
+plot(s22, col="blue", xlab= "Años", ylab="Serie 2")
+##1.2
+s33<- s3ts[150:250]
+s44<- s4ts[150:250]
+##1.3
+sd1<-decompose(s1ts)
+plot(sd1)
+names(sd1)
+sd1 
+tt<-sd1$trend 
+ss<-sd1$seasonal
+
+sd2<-decompose(s2ts)
+plot(sd2)
+names(sd2)
+sd2
+ttt<-sd2$trend 
+sss<-sd2$seasonal
+
+tserie1<- data.frame(sd1$trend,sd1$seasonal)
+tserie2<- data.frame(sd2$trend,sd2$seasonal)
