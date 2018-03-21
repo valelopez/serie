@@ -1,0 +1,18 @@
+require(fpp)
+pib<-read.csv("C://Users//USUARIO//Desktop//pib.csv", header = FALSE)##NO CONSIDERAR ENCABEZADO
+pibts<-ts(pib, start = 1960, frequency = 1)
+pibts
+##SES
+help(ses)
+mod1<-ses(pibts, alpha = .1, initial = "simple", h=5)
+mod1$fitted ##AJUSTADO
+##HOLT
+mod2<-holt(pibts,alpha = .8, beta = .5, initial = "simple", h=5)
+mod2$fitted
+##GRAFICAR
+X11()
+plot(mod1)
+lines(mod1$fitted, col="green")
+lines(mod2$fitted, col="red")
+lines(mod1$mean, col="green")
+lines(mod2$mean, col="red")
