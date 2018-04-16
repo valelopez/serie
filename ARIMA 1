@@ -1,0 +1,11 @@
+
+require(fpp)
+require(foreign)
+require(forecast)
+
+td<-read.csv("C://Users//USUARIO//Downloads//tdesoc.csv")
+tdts<-ts(td,frequency=4,start=2005)
+mod1<-auto.arima(tdts, seasonal = F)#Popone modelo de pronostico, arroja las constantes de la
+#parte del modelo AR y de MA, asi como drift (dato de la deriva)
+mod1
+plot(forecast(mod1,h=10))
