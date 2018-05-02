@@ -1,0 +1,75 @@
+require(fpp)
+require(forecast)
+require(foreign)
+bimbo<-read.csv("C://Users//USUARIO//Desktop//bimbo.csv", header = F)
+bimbots<-ts(bimbo, frequency = 252, start = c(2017,87))
+##Para ARIMA, la serie debe de ser estacionaria, entonces para comrponar eso:
+adf.test(bimbots) ## el p value debe de ser menor a 0.05, en este caso es de .08265, 
+# por lo tanto no es estacionaria. Por lo que APLICAREMOS UNA DIFERENCIACIÓN para
+# convertirla en estacionaria.
+dbimbots<-diff(bimbots)
+#Y volvemos a aplicar es adf para ver si ya es estacionaria la serie.
+adf.test(dbimbots) ##Ahora que la st es estacionaria se aplica el modelo ARIMA, 
+# por lo que hay que elegir los valores p, d y q.
+# Como se aplico una diferenciación, entonces d=1, para elegir los valores de p y q
+# utilizamos la fn de autocorrelación (acf) y la de autocorrelación parcial (pacf).
+# ACF- para elegir q , PACF- para elegir p.
+x11()
+acf(dbimbots, main="ACF") 
+X11()
+pacf(dbimbots, main="PACF")
+#####se observan las gráficas y el primer valor que rebase la frontera seráel valor de q y p.
+# Siempre al aplicar acf el primer valor (en 0.0 rebasará)
+#Entonces obtendremos un modelo ARIMA EN GENERAL (NO LA PROPUESTA DE VALORES p,d,q que obtuvimos)
+##Nos tenemos que fijar en el AICc(AIC corregido)
+mod1<-Arima(bimbots, order=c(0,1,0))##Arima con mayuscula!
+mod1
+mod2<-Arima(bimbots, order=c(1,1,2))
+mod2
+mod3<-Arima(bimbots, order=c(3,1,2))
+mod3
+mod4<-Arima(bimbots, order=c(2,1,2))
+mod4
+#Por el AICc elegimos el modelo 4
+mod4bim<-forecast(mod4, h=12)
+x11()
+plot(forecast(mod4, h=12), include=45) #SIN INCLUDE, grafica toda la serie, con include solo los
+#últimos datos
+
+## EJERCICIO
+# Elegir dos st (diferente a acciones y tasas de oc), repetir el procedimiento
+# para elegir el mejor modelo ARIMA según los criterios AICc y comparar con auto.arima.
+#1 PIB
+pib<-read.csv("C://Users//USUARIO//Desktop//pibmx.csv", header = F)
+pibts<-ts(pib, frequency = 1, start = 1961)
+adf.test(pibts) ##SI ES ESTACIONARIA, por lo tanto d=0
+x11()
+acf(pibts, main="ACF") # q=2
+X11()
+pacf(pibts, main="PACF") # como no se puede determinar p entonces
+mod1pib<-Arima(pibts, order=c(0,1,2))
+mod1pib
+mod2pib<-Arima(pibts, order=c(1,1,2))
+mod2pib
+#ELEGIMOS EL MODELO 1
+auto.arima(pibts) #arima(0,1,2) , en comparación con la propuesta es CORRECTO
+mod1pibb<-forecast(mod1pib, h=10)
+x11()
+plot(forecast(mod1pib, h=10), include=15)
+
+#2 Emisiones CO2
+co2<-read.csv("C://Users//USUARIO//Desktop//co2.csv", header = F)
+co2ts<-ts(co2, frequency = 1, start = 1962)
+adf.test(co2ts) ##NO ES ESTACIONARIA
+dco2ts<-diff(co2ts)
+adf.test(dco2ts)# entonces d=1
+x11()
+acf(dco2ts, main="ACF") # q=2
+X11()
+pacf(dco2ts, main="PACF") # p=2
+mod1CO2<-Arima(co2ts, order=c(2,1,2))
+mod1CO2
+auto.arima(co2ts) #arima(0,1,2), es incorrecta la propuesta, es mejor el auto.arima
+mod1co21<-forecast(auto.arima(co2ts), h=10)
+x11()
+plot(forecast(auto.arima(co2ts), h=10), include=10)
