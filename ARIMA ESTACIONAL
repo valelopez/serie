@@ -1,0 +1,24 @@
+install.packages("fpp")
+require(fpp)
+help("euretail") #serie de tiempo
+plot(euretail)
+tsdisplay(diff(euretail,4))
+tsdisplay(diff(diff(euretail,4)))
+#Con esto se puede observar a grandes rasgos una serie mas parecida a la estacionaria, por lo que ahora
+#hay que encontrar un modelo arima mas apropiado basado en el ACF y PACF, el primer rezago o valor que
+#se observa en el ACF y que sobrepasa ligeramente la frontera podría sugerir un componente MA(1), por lo 
+#que podriamos iniciar con un ARIMA(0,1,1)(0,1,1)4
+mod<-Arima(euretail,order=c(0,1,1), seasonal=c(0,1,1))
+#para observar residuales
+tsdisplay(residuals(mod))
+#con la primer propuesta de ARIMA se tienen que observar los residuales de dicho modelo, y también, observar
+#los valores de ACF y PACF de los residuales muestran valores significativos en el rezago 2 y casi signifiativos 
+#en el rezago 3, lo que indica que pueden agregarse algunos componentes no estacionales en el modelo,
+##POR EJEMPLO: ARIMA(0,1,2)(0,1,1)4 y (0,1,3)(0,1,1)4 , con estos modelos propuestos se aplica R y observamos
+#el mejor AICc para elegir el moelo a predecir.
+########Una vez que se elige el modelo, el ultimo paso es obtener los residuales y garanztizar que sean ruido 
+#blanco con la prueba box.test(res,lag=16,fitdf=4,type="Ljung-Box")
+mod2<-Arima(euretail, order=c(0,1,2), seasonal=c(0,1,1))
+mod3<-Arima(euretail, order=c(0,1,3), seasonal=c(0,1,1))
+res3<-residuals
+Box.test(residuals(mod3), lag=16,fitdf=4, type="Ljung-Box")
