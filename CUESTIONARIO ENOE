@@ -1,0 +1,22 @@
+DESOCUPADOS 
+install.packages("foreign")
+require(foreign)
+install.packages("fpp")
+require(fpp)
+aa<- read.dbf("C://Users//USUARIO//Desktop//coe1t417.dbf")
+##descargar Descriptor de Archivos de este cuestionario (BASICO)
+
+#subset(basedatos,p1b=3|p1c)
+class(aa$P1) #ver si es numerica, COMO NO SON NUMERICAS, LAS CONVERTIMOS->(primero cambiamos a caracter)
+aa$P1<-as.numeric((as.character(aa$P1)))
+aa$P1A1<-as.numeric((as.character(aa$P1A1)))
+aa$P1A2<-as.numeric((as.character(aa$P1A2)))
+aa$P1B<-as.numeric((as.character(aa$P1B)))
+aa$P1C<-as.numeric((as.character(aa$P1C)))
+aa$P1D<-as.numeric((as.character(aa$P1D)))
+aa$P1E<-as.numeric((as.character(aa$P1E)))
+ocup<-subset(aa,aa$P1==1|aa$P1A1==1|aa$P1A2==2|aa$P1C==1|aa$P1C==2|aa$P1C==3|aa$P1C==4|aa$P1D==1|aa$P1E==1)
+
+sum(table(aa$P3))
+ 
+table(aa$P1==1)
