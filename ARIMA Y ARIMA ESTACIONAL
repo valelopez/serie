@@ -1,0 +1,127 @@
+##EJERCICIO 1
+#Con acción de aeromexico, proponer arima (1,0,0) ie modelo autorregresivo 
+#y plantearlo con base en la ec. de modelos arima, después proponer
+#arima(2,0,0) y de la misma manera, plantear la ecuación.
+#Ahora, proponer arima(0,0,1) ie modelo MA(1) y plantear ecuación, posteriormente, 
+#hacer lo mismo con arima(0,0,2) ie MA(2)
+require(fpp)
+aeromx<-read.csv("C://Users//USUARIO//Desktop//AEROMEX.MX.csv")
+aeromxts<-ts(aeromx, frequency = 252, start = c(2017,96))
+mod1<-Arima(aeromxts, order=c(1,0,0))
+mod1
+#Ecuacion arima(1,0,0) : Yt=c+(.9985)(Yt-1)
+tsdisplay(residuals(mod1))
+mod2<-Arima(aeromxts, order=c(2,0,0))
+mod2
+#Ecuacion arima(2,0,0) : Yt=c+(1.0035)(Yt-1)+(-.0051)(Yt-2)
+mod3<-Arima(aeromxts,order=c(0,0,1))
+mod3
+#Ecuacion arima(0,0,1) : Yt=c+(.9707)(EXPt-1)
+mod4<-Arima(aeromxts, order=c(0,0,2))
+mod4
+#Ecuacion arima(2,0,0) : Yt=c+(1.5348)(EXPt-1)+(.8112)(EXPt-2)
+
+
+##EJERCICIO 2
+#Para las sig series encontrar la transformación o diferenciación p/convertir en estacionaria,
+#comprobarlo a través de graficas y el adf.test, además proponer modelos arima que se ajusten 
+#a la serie y confirmar que los residuales sean ruido blanco
+#SERIES: 
+#1 usnetelec
+#2 usgdp
+#3 mcopper
+#4 enplanements
+#5 visitors
+
+##1
+plot(usnetelec)
+adf.test(usnetelec) #p-value=.3535 ie NO estacionaria
+plot((diff(usnetelec)))
+adf.test(diff(usnetelec)) #p-value=.308 ie NO estacionaria
+plot(diff(diff(usnetelec)))
+adf.test(diff(diff(usnetelec))) #p-value=.01 ESTACIONARIA
+tsdisplay(diff(diff(usnetelec)))
+# Como se aplicaron dos diff, entonces d=2, para elegir los valores de p y q
+# utilizamos la fn de autocorrelación (acf) y la de autocorrelación parcial (pacf).
+# ACF- para elegir q , PACF- para elegir p.
+x11()
+acf(diff(diff(usnetelec)), main="ACF") #q=1
+X11()
+pacf(diff(diff(usnetelec)), main="PACF") #p=3
+#Propuesta     AICc=578.31
+mod5<-Arima(usnetelec,order = c(3,2,1))
+mod5
+#Auto.arima    AICc=580.46
+auto.arima(usnetelec)
+#Verificar residuales Ruido blanco con p-value>.05 (residuales independientes)
+Box.test(residuals(mod5), lag=16,fitdf=1, type="Ljung-Box") #p-value=.8112
+
+##2
+plot(usgdp)
+adf.test(usgdp) #p-value=.99 ie NO estacionaria
+plot((diff(usgdp)))
+adf.test(diff(usgdp)) #p-value=.01 ie ESTACIONARIA
+tsdisplay(diff(usgdp))
+# Como se aplicó una diff, entonces d=1, para elegir los valores de p y q
+# utilizamos la fn de autocorrelación (acf) y la de autocorrelación parcial (pacf).
+# ACF- para elegir q , PACF- para elegir p.
+x11()
+acf(diff(usgdp), main="ACF") #Como la grafica presenta demasiadas q´s que rebasan el límite
+# entonces aplicaremos auto.arima
+#Auto.arima    AICc=2409.39
+auto.arima(usgdp)
+#Verificar residuales Ruido blanco con p-value>.05 (residuales independientes)
+Box.test(residuals(auto.arima(usgdp)), lag=16,fitdf=1, type="Ljung-Box") #p-value=.04728
+# como el p-value es menor a .05 entonces modificaremos el auto.arima
+mod6<-Arima(usgdp, order = c(2,3,2))
+mod6 #AICc=2406.05
+#Con este nuevo modelo, otra vez...
+#Verificar residuales Ruido blanco con p-value>.05 (residuales independientes)
+Box.test(residuals(mod6), lag=16,fitdf=1, type="Ljung-Box") #p-value=.05278
+
+##3
+plot(mcopper)
+adf.test(mcopper) #p-value=.6641 ie NO estacionaria
+plot((diff(mcopper)))
+adf.test(diff(mcopper)) #p-value=.01 ESTACIONARIA
+tsdisplay(diff(mcopper))
+# Como se aplicó una diff, entonces d=1, para elegir los valores de p y q
+# utilizamos la fn de autocorrelación (acf) y la de autocorrelación parcial (pacf).
+# ACF- para elegir q , PACF- para elegir p.
+x11()
+acf(diff(mcopper), main="ACF") #q=1
+X11()
+pacf(diff(mcopper), main="PACF") #p=0
+#Propuesta     AICc=6501.09
+mod9<-Arima(mcopper,order = c(0,1,1))
+mod9
+#Auto.arima    AICc=6501.09
+auto.arima(mcopper)
+#Verificar residuales Ruido blanco con p-value>.05 (residuales independientes)
+Box.test(residuals(mod9), lag=16,fitdf=1, type="Ljung-Box") #p-value=.02265
+# como el p-value es menor a .05 entonces modificaremos el auto.arima
+mod10<-Arima(usgdp, order = c(0,1,6))
+mod10 #AICc=2406.05
+#Con este nuevo modelo, otra vez...
+#Verificar residuales Ruido blanco con p-value>.05 (residuales independientes)
+Box.test(residuals(mod10), lag=16,fitdf=1, type="Ljung-Box") #p-value=.06263
+
+##4
+plot(enplanements)
+adf.test(enplanements) #p-value=.01 ESTACIONARIA
+tsdisplay(enplanements)
+#Como la grafica presenta demasiadas q´s que rebasan el límite entonces aplicaremos auto.arima
+#Auto.arima    AICc=993.55
+auto.arima(enplanements) ##ARIMA(2,0,1)(0,1,1)[12]
+#Verificar residuales Ruido blanco con p-value>.05 (residuales independientes)
+Box.test(residuals(auto.arima(enplanements)), lag=16,fitdf=1, type="Ljung-Box") #p-value=.8878
+
+##5
+plot(visitors)
+adf.test(visitors) #p-value=.01 ESTACIONARIA
+tsdisplay(visitors)
+#Como la grafica presenta demasiadas q´s que rebasan el límite entonces aplicaremos auto.arima
+#Auto.arima    AICc=1946.04 
+auto.arima(visitors)  ##ARIMA(1,0,1)(0,1,2)[12] with drift 
+#Verificar residuales Ruido blanco con p-value>.05 (residuales independientes)
+Box.test(residuals(auto.arima(visitors)), lag=16,fitdf=1, type="Ljung-Box") #p-value=.6037
